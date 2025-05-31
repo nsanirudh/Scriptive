@@ -2,6 +2,7 @@
 /shelf/
 /.idea
 /data
+/.svelte-kit/
 
 .env
 package-lock.json
