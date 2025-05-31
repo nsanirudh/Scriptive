@@ -1,0 +1,29 @@
+{
+	"/": [
+		"src/routes/+layout.ts",
+		"src/routes/+layout.server.ts",
+		"src/routes/+layout.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/auth/callback": [
+		"src/routes/auth/callback/+server.ts"
+	],
+	"/auth/login": [
+		"src/routes/+layout.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/dashboard": [
+		"src/routes/+layout.ts",
+		"src/routes/+layout.server.ts",
+		"src/routes/+layout.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/dashboard/predict": [
+		"src/routes/+layout.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/dashboard/train": [
+		"src/routes/+layout.ts",
+		"src/routes/+layout.server.ts"
+	]
+}
