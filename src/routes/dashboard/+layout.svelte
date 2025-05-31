@@ -3,6 +3,7 @@
   import { goto } from '$app/navigation';
   import { Brain, FileText, LogOut } from 'lucide-svelte';
   import { clsx } from 'clsx';
+  import { logout } from '$lib/auth';
 
   const navigation = [
     { href: '/dashboard/train', label: 'Train', icon: Brain },
@@ -10,10 +11,8 @@
   ];
 
   async function handleSignOut() {
-    const { error } = await $page.data.supabase.auth.signOut();
-    if (!error) {
-      goto('/');
-    }
+    logout();
+    goto('/');
   }
 </script>
 

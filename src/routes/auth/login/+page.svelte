@@ -1,32 +1,27 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
   import Button from '$lib/components/Button.svelte';
   import Input from '$lib/components/Input.svelte';
   import { Mail } from 'lucide-svelte';
+  import { login } from '$lib/auth';
 
   let email = '';
+  let password = '';
   let loading = false;
   let error: string | null = null;
-
-  $: if ($page.data.session) {
-    goto('/dashboard');
-  }
 
   async function handleLogin() {
     try {
       loading = true;
       error = null;
-      const { error: err } = await $page.data.supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`
-        }
-      });
-      if (err) throw err;
-      alert('Check your email for the login link!');
+      
+      if (login(email, password)) {
+        goto('/dashboard');
+      } else {
+        error = 'Invalid credentials';
+      }
     } catch (err) {
-      error = err.message;
+      error = 'An error occurred';
       console.error('Login error:', err);
     } finally {
       loading = false;
@@ -51,8 +46,16 @@
         required
       />
       
+      <Input
+        type="password"
+        label="Password"
+        bind:value={password}
+        placeholder="Enter your password"
+        required
+      />
+      
       <Button type="submit" class="w-full" disabled={loading}>
-        {loading ? 'Sending link...' : 'Send Magic Link'}
+        {loading ? 'Signing in...' : 'Sign In'}
       </Button>
     </form>
   </div>

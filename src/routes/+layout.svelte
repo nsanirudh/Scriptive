@@ -1,21 +1,12 @@
 <script lang="ts">
 	import '../app.postcss';
-	import { invalidate } from '$app/navigation';
-	import { onMount } from 'svelte';
+	import { isAuthenticated } from '$lib/auth';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
-	export let data;
-
-	let { supabase, session } = data;
-
-	onMount(() => {
-		const { data: { subscription } } = supabase.auth.onAuthStateChange((event, _session) => {
-			if (_session?.expires_at !== session?.expires_at) {
-				invalidate('supabase:auth');
-			}
-		});
-
-		return () => subscription.unsubscribe();
-	});
+	$: if ($page.url.pathname.startsWith('/dashboard') && !$isAuthenticated) {
+		goto('/auth/login');
+	}
 </script>
 
 <slot />
