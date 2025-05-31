@@ -13,7 +13,7 @@ import { PUBLIC_API_URL } from '$env/static/public';
   let loading = false;
   let error: string | null = null;
   let script: string | null = null;
-let uploadProgress: number | null = null;
+  let uploadProgress: number | null = null;
   
   const tones = ['educational', 'dramatic', 'casual', 'professional'];
   const audiences = ['general', 'beginners', 'intermediate', 'advanced'];
