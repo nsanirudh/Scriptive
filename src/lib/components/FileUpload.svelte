@@ -39,6 +39,7 @@
 </script>
 
 <div
+  role="region"
   class={clsx(
     'border-2 border-dashed rounded-lg p-8 text-center transition-colors',
     dragOver ? 'border-primary bg-primary/5' : 'border-gray-300',

@@ -1,7 +1,8 @@
 <script lang="ts">
   import Button from '$lib/components/Button.svelte';
   import Input from '$lib/components/Input.svelte';
-  import FileUpload from '$lib/components/FileUpload.svelte';
+import FileUpload from '$lib/components/FileUpload.svelte';
+import { PUBLIC_API_URL } from '$env/static/public';
   
   let channelId = '';
   let topic = '';
@@ -12,10 +13,39 @@
   let loading = false;
   let error: string | null = null;
   let script: string | null = null;
+  let uploadProgress: number | null = null;
   
   const tones = ['educational', 'dramatic', 'casual', 'professional'];
   const audiences = ['general', 'beginners', 'intermediate', 'advanced'];
   const lengths = ['short', 'medium', 'long'];
+
+function uploadFilesXhr(filesList: FileList): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `${PUBLIC_API_URL}/predict/upload-context`);
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) {
+        uploadProgress = Math.round((e.loaded / e.total) * 100);
+      }
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        const data = JSON.parse(xhr.responseText);
+        resolve(data.collection_name);
+      } else {
+        reject(new Error('Failed to upload reference documents'));
+      }
+    };
+    xhr.onerror = () => {
+      reject(new Error('Network error while uploading documents'));
+    };
+    const form = new FormData();
+    for (const file of Array.from(filesList)) {
+      form.append('files', file);
+    }
+    xhr.send(form);
+  });
+}
   
   async function handleSubmit() {
     try {
@@ -23,20 +53,27 @@
       error = null;
       script = null;
       
+      let collectionName: string | null = null;
+      if (files) {
+        uploadProgress = 0;
+        try {
+          collectionName = await uploadFilesXhr(files);
+        } finally {
+          uploadProgress = null;
+        }
+      }
+
       const formData = new FormData();
       formData.append('channel_id', channelId);
       formData.append('topic', topic);
       formData.append('tone', tone);
       formData.append('audience', audience);
       formData.append('length', length);
-      
-      if (files) {
-        for (const file of files) {
-          formData.append('files', file);
-        }
+      if (collectionName) {
+        formData.append('collection_name', collectionName);
       }
-      
-      const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/predict/script`, {
+
+      const response = await fetch(`${PUBLIC_API_URL}/predict/script`, {
         method: 'POST',
         body: formData
       });
@@ -46,7 +83,7 @@
       const data = await response.json();
       script = data.script;
     } catch (err) {
-      error = err.message;
+      error = err instanceof Error ? err.message : String(err);
     } finally {
       loading = false;
     }
@@ -128,9 +165,22 @@
       <FileUpload
         multiple
         accept=".pdf,.docx,.txt"
-        error={error}
+        error={error ?? undefined}
         on:change={({ detail }) => files = detail.files}
       />
+      {#if files?.length}
+        <ul class="mt-2 text-sm text-gray-700">
+          {#each Array.from(files) as file}
+            <li>{file.name} ({Math.round(file.size / 1024)} KB)</li>
+          {/each}
+        </ul>
+      {/if}
+      {#if uploadProgress !== null}
+        <div class="mt-2">
+          <progress value={uploadProgress} max="100" class="w-full"></progress>
+          <p class="text-sm text-gray-600 mt-1">{uploadProgress}% uploaded</p>
+        </div>
+      {/if}
     </div>
     
     <Button type="submit" disabled={loading}>

@@ -30,8 +30,8 @@ def upload_context(files: List[UploadFile] = File(...)) -> dict:
     """
     Accept and ingest user documents. Saves to temp and returns text.
     """
-    from src.prediction.doc_ingest import ingest_documents
-    from src.prediction.doc_embedder import UserDocEmbedder
+    from modules.prediction.doc_ingest import ingest_documents
+    from modules.prediction.doc_embedder import UserDocEmbedder
 
     file_paths = []
     for file in files:
@@ -62,16 +62,16 @@ def generate_script(
     """
     Generates a script using topic + style + (optional) user document context.
     """
-    from src.prediction.retriever import Retriever
-    from src.prediction.prompt_builder import build_generation_prompt
-    from src.prediction.generator import ScriptGenerator
+    from modules.prediction.retriever import Retriever
+    from modules.prediction.prompt_builder import build_generation_prompt
+    from modules.prediction.generator import ScriptGenerator
     import json
     import os
 
     retriever = Retriever()
     context = retriever.retrieve_relevant_chunks(
         collection_name or channel_id,
-        topic=topic,
+        query=topic,
         top_k=5
     )
 

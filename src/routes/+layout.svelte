@@ -3,8 +3,9 @@
 	import { isAuthenticated } from '$lib/auth';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
 
-	$: if ($page.url.pathname.startsWith('/dashboard') && !$isAuthenticated) {
+	$: if (browser && $page.url.pathname.startsWith('/dashboard') && !$isAuthenticated) {
 		goto('/auth/login');
 	}
 </script>

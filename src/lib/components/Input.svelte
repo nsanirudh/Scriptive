@@ -1,6 +1,7 @@
 <script lang="ts">
   import { clsx } from 'clsx';
   import type { HTMLInputAttributes } from 'svelte/elements';
+  import { onMount } from 'svelte';
 
   interface $$Props extends HTMLInputAttributes {
     label?: string;
@@ -23,15 +24,21 @@
     'disabled:opacity-50 disabled:cursor-not-allowed',
     $$props.class
   );
+
+  let inputId = '';
+  onMount(() => {
+    inputId = 'input-' + Math.random().toString(36).slice(2, 10);
+  });
 </script>
 
 {#if label}
-  <label class="block text-sm font-medium text-gray-700 mb-1">
+  <label class="block text-sm font-medium text-gray-700 mb-1" for={inputId}>
     {label}
   </label>
 {/if}
 
 <input
+  id={inputId}
   {type}
   value={value}
   on:input={(e) => value = e.currentTarget.value}
@@ -39,10 +46,10 @@
   {disabled}
   class={className}
   aria-invalid={!!error}
-  aria-errormessage={error ? `error-${$$slots.default}` : undefined}
+  aria-errormessage={error ? `error-${inputId}` : undefined}
   {...$$restProps}
 />
 
 {#if error}
-  <p class="mt-1 text-sm text-red-500" id="error-{$$slots.default}">{error}</p>
+  <p class="mt-1 text-sm text-red-500" id="error-{inputId}">{error}</p>
 {/if}

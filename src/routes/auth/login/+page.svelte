@@ -42,7 +42,7 @@
         label="Email"
         bind:value={email}
         placeholder="Enter your email"
-        error={error}
+        error={error ?? undefined}
         required
       />
       

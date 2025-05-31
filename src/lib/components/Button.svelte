@@ -25,10 +25,12 @@
     lg: 'px-6 py-3 text-lg'
   };
 
+  $: safeVariant = variant ?? 'primary';
+  $: safeSize = size ?? 'md';
   $: className = clsx(
     'rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed',
-    variants[variant],
-    sizes[size],
+    variants[safeVariant],
+    sizes[safeSize],
     $$props.class
   );
 </script>

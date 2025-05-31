@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from '$lib/components/Button.svelte';
-  import Input from '$lib/components/Input.svelte';
+import Input from '$lib/components/Input.svelte';
+import { PUBLIC_API_URL } from '$env/static/public';
   
   let channelHandle = '';
   let numVideos = 10;
@@ -16,7 +17,7 @@
       formData.append('channel_handle', channelHandle);
       formData.append('num_videos', numVideos.toString());
       
-      const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/train/style`, {
+      const response = await fetch(`${PUBLIC_API_URL}/train/style`, {
         method: 'POST',
         body: formData
       });
@@ -25,7 +26,7 @@
       
       alert('Style profile created successfully!');
     } catch (err) {
-      error = err.message;
+      error = err instanceof Error ? err.message : String(err);
     } finally {
       loading = false;
     }
@@ -41,7 +42,7 @@
       label="YouTube Channel Handle"
       bind:value={channelHandle}
       placeholder="@channelname"
-      error={error}
+      error={error ?? undefined}
       required
     />
     
@@ -52,7 +53,7 @@
       <input
         type="range"
         bind:value={numVideos}
-        min="5"
+        min="1"
         max="20"
         step="1"
         class="w-full"
