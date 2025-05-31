@@ -27,6 +27,7 @@
       alert('Check your email for the login link!');
     } catch (err) {
       error = err.message;
+      console.error('Login error:', err);
     } finally {
       loading = false;
     }
