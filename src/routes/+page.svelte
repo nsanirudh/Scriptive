@@ -15,8 +15,9 @@
       Generate YouTube scripts with AI, trained on your favorite creators' style
     </p>
     <div class="space-y-4">
-      <Button href="/auth/login" class="w-full">Sign In</Button>
-      <Button href="/auth/register" variant="outline" class="w-full">Create Account</Button>
+      <a href="/auth/login">
+        <Button class="w-full">Sign In</Button>
+      </a>
     </div>
   </div>
 </main>
