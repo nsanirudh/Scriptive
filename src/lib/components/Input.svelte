@@ -33,7 +33,8 @@
 
 <input
   {type}
-  bind:value
+  value={value}
+  on:input={(e) => value = e.currentTarget.value}
   {placeholder}
   {disabled}
   class={className}
