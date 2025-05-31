@@ -1,0 +1,1 @@
+import{w as i}from"./ehUx1xvm.js";const a=i(!1),t={email:"admin@scriptive.ai",password:"admin123"};function n(s,e){return s===t.email&&e===t.password?(a.set(!0),!0):!1}function o(){a.set(!1)}export{o as a,a as i,n as l};

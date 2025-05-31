@@ -1,0 +1,1 @@
+import{s,o as n}from"../chunks/bNphU090.js";import{S as e,i as r}from"../chunks/P-961bDU.js";import{g as a}from"../chunks/ehUx1xvm.js";function i(o){return n(()=>{a("/dashboard/predict")}),[]}class u extends e{constructor(t){super(),r(this,t,i,null,s,{})}}export{u as component};
