@@ -62,9 +62,13 @@
         type="text"
         label="Channel ID"
         bind:value={channelId}
-        placeholder="Enter channel ID"
+        placeholder="Enter the ID of a trained channel (e.g., veritasium)"
         required
-      />
+      >
+        <p class="mt-1 text-sm text-gray-500">
+          This is the ID of a channel you've already trained in the Train tab. The generated script will mimic this channel's style.
+        </p>
+      </Input>
       
       <Input
         type="text"
